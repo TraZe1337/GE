@@ -63,7 +63,7 @@ public class Ball : MonoBehaviour
         Vector3 collisionPoint = GetComponent<Collider>().ClosestPoint(obstacle.transform.position);
         Vector3 normal = (collisionPoint - obstacle.transform.position).normalized;
         normal.y = 0;
-        velocity = Vector3.Reflect(velocity, normal);
+        velocity = Vector3.Reflect(velocity, normal).normalized * velocity.magnitude; // Normalize and maintain magnitude
         Obstacle obstacleScript = obstacle.gameObject.GetComponent<Obstacle>();
         if (obstacleScript.hardness > 0)
         {
@@ -81,7 +81,7 @@ public class Ball : MonoBehaviour
             }
             else
             {
-                if (Random.value <= 0.5f)
+                if (Random.value <= 0.66f)
                 {
                     Vector3 powerUpPosition =
                         new Vector3(obstacle.transform.position.x, 0.5f, obstacle.transform.position.z);

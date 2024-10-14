@@ -120,12 +120,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ac68a078ace540daa1a18134d8bd733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 2, y: 0, z: 2}
+  velocity: {x: 2.5, y: 0, z: 4}
   newBall: {fileID: 2973828581495007528}
   powerUp: {fileID: 8070861965839873285, guid: dce2737d64e074fb1b76b69e85a1e825, type: 3}
   beep: {fileID: 4256037946150634621}
   text: {fileID: 0}
   score: {fileID: 0}
+  slowTimeText: {fileID: 0}
   scoreNumber: 0
   healthBarHUDTester: {fileID: 0}
   playerStats: {fileID: 0}
