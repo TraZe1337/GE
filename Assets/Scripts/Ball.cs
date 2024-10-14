@@ -81,7 +81,7 @@ public class Ball : MonoBehaviour
             }
             else
             {
-                if (Random.value <= 1f)
+                if (Random.value <= 0.5f)
                 {
                     Vector3 powerUpPosition =
                         new Vector3(obstacle.transform.position.x, 0.5f, obstacle.transform.position.z);
