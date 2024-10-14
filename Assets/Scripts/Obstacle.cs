@@ -10,7 +10,6 @@ public class Obstacle : MonoBehaviour
         hardness = Random.Range(0, 3);
         renderer = GetComponent<Renderer>();
         UpdateColor();
-        Debug.Log(hardness);
     }
 
     public void DecreaseHardness()

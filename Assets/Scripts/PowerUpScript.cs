@@ -7,7 +7,9 @@ public class PowerUpScript : MonoBehaviour
     public PowerUpType powerUpType;
     public PlayerStats playerStats;
     public float dropSpeed = 2f;
+    public Ball ball;
     private new Renderer renderer;
+    
     
     private void Start()
     {
@@ -43,14 +45,12 @@ public class PowerUpScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("hit");
         if (other.CompareTag("Paddle"))
         {
-            Debug.Log("Power-up collected");
             switch (powerUpType)
             {
                 case PowerUpType.SlowTime:
-                    StartCoroutine(SlowTime());
+                    ball.SlowTime();
                     break;
                 case PowerUpType.ExtraLife:
                     IncreaseLife();
@@ -65,11 +65,6 @@ public class PowerUpScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        else
-        {
-            // Continue dropping if it hits anything else
-            Debug.Log("Power-up hit something else, continuing to drop");
-        }
     }
     
     public void IncreaseLife()
@@ -78,13 +73,6 @@ public class PowerUpScript : MonoBehaviour
         {
             playerStats.Heal(1);
         }
-    }
-
-    private IEnumerator SlowTime()
-    {
-        Time.timeScale = 0.5f;
-        yield return new WaitForSecondsRealtime(30);
-        Time.timeScale = 1f;
     }
     
 

@@ -1,5 +1,7 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Ball : MonoBehaviour
 {
@@ -9,13 +11,12 @@ public class Ball : MonoBehaviour
     public AudioSource beep;
     public TMP_Text text;
     public TMP_Text score;
-    public float scoreNumber = 0;
+    public TMP_Text slowTimeText;
+    public float scoreNumber;
 
     public HealthBarHUDTester healthBarHUDTester;
     public PlayerStats playerStats;
 
-
-    // Update is called once per frame
     void Update()
     {
         transform.position += velocity * Time.deltaTime;
@@ -61,7 +62,7 @@ public class Ball : MonoBehaviour
     {
         Vector3 collisionPoint = GetComponent<Collider>().ClosestPoint(obstacle.transform.position);
         Vector3 normal = (collisionPoint - obstacle.transform.position).normalized;
-        normal.y = 0; // Ignore the y-component to prevent changes in the y-axis
+        normal.y = 0;
         velocity = Vector3.Reflect(velocity, normal);
         Obstacle obstacleScript = obstacle.gameObject.GetComponent<Obstacle>();
         if (obstacleScript.hardness > 0)
@@ -74,15 +75,44 @@ public class Ball : MonoBehaviour
             scoreNumber += 10;
             score.text = "Score: " + scoreNumber;
 
-            if (Random.value <= 1f )
+            if (GameObject.FindGameObjectsWithTag("Obstacle").Length == 1)
             {
-                Debug.Log("41241");
-                Vector3 powerUpPosition = new Vector3(obstacle.transform.position.x, 0.5f, obstacle.transform.position.z);
-                GameObject spawnedPowerUp = Instantiate(powerUp, powerUpPosition, Quaternion.identity);
-                PowerUpScript powerUpScript = spawnedPowerUp.GetComponent<PowerUpScript>();
-                powerUpScript.powerUpType = (PowerUpScript.PowerUpType)Random.Range(0, 3);
-                powerUpScript.playerStats = playerStats; // Set the ball reference
+                SceneManager.LoadScene(0);
+            }
+            else
+            {
+                if (Random.value <= 1f)
+                {
+                    Vector3 powerUpPosition =
+                        new Vector3(obstacle.transform.position.x, 0.5f, obstacle.transform.position.z);
+                    GameObject spawnedPowerUp = Instantiate(powerUp, powerUpPosition, Quaternion.identity);
+                    PowerUpScript powerUpScript = spawnedPowerUp.GetComponent<PowerUpScript>();
+                    powerUpScript.powerUpType = (PowerUpScript.PowerUpType)Random.Range(0, 3);
+                    powerUpScript.playerStats = playerStats;
+                    powerUpScript.ball = this;
+                }
             }
         }
+    }
+
+    public void SlowTime()
+    {
+        StartCoroutine(ActivateSlowTime());
+    }
+
+    public IEnumerator ActivateSlowTime() {
+        Time.timeScale = 0.5f;
+        float slowTimeDuration = 10f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < slowTimeDuration)
+        {
+            slowTimeText.text = $"Slow Time: {slowTimeDuration - elapsedTime:F1}s";
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        slowTimeText.text = "";
+        Time.timeScale = 1f;
     }
 }
